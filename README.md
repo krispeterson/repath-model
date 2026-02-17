@@ -56,6 +56,10 @@ The following scripts were migrated from `repath-mobile/ml` into this repo:
 - `scripts/build_resolved_benchmark_manifest.py`
 - `scripts/audit_benchmark_dataset.py`
 - `scripts/build_supported_holdout_manifest.py`
+- `scripts/plan_benchmark_priority.py`
+- `scripts/plan_benchmark_coverage_expansion.py`
+- `scripts/build_benchmark_batches.py`
+- `scripts/build_benchmark_completion_template.py`
 
 Today these workflows still read/write datasets and artifacts that live in `repath-mobile` (`assets/models`, `ml/artifacts`, `test/benchmarks`).
 
@@ -135,6 +139,28 @@ python3 scripts/audit_benchmark_dataset.py \
   --manifest ../repath-mobile/test/benchmarks/municipal-benchmark-manifest.resolved.json \
   --taxonomy ../repath-mobile/assets/models/municipal-taxonomy-v1.json \
   --out ../repath-mobile/test/benchmarks/benchmark-dataset-audit.resolved.json
+
+# plan high-value benchmark labeling queue
+python3 scripts/plan_benchmark_priority.py \
+  --taxonomy ../repath-mobile/assets/models/municipal-taxonomy-v1.json \
+  --manifest ../repath-mobile/test/benchmarks/municipal-benchmark-manifest-v2.json \
+  --out ../repath-mobile/test/benchmarks/benchmark-priority-report.json
+
+# plan coverage expansion rows and template
+python3 scripts/plan_benchmark_coverage_expansion.py \
+  --taxonomy ../repath-mobile/assets/models/municipal-taxonomy-v1.json \
+  --manifest ../repath-mobile/test/benchmarks/municipal-benchmark-manifest-v2.json \
+  --out ../repath-mobile/test/benchmarks/benchmark-coverage-expansion-report.json \
+  --template-out ../repath-mobile/test/benchmarks/benchmark-coverage-expansion-template.csv
+
+# build labeling batches + completion template
+python3 scripts/build_benchmark_batches.py \
+  --priority ../repath-mobile/test/benchmarks/benchmark-priority-report.json \
+  --manifest ../repath-mobile/test/benchmarks/municipal-benchmark-manifest-v2.json \
+  --out-dir ../repath-mobile/test/benchmarks
+python3 scripts/build_benchmark_completion_template.py \
+  --batches ../repath-mobile/test/benchmarks/benchmark-labeling-batches.json \
+  --out ../repath-mobile/test/benchmarks/benchmark-completion-template.csv
 ```
 
 ## Notebooks
@@ -233,5 +259,6 @@ python3 /path/to/repath-model/scripts/verify_release.py \
 - Benchmark analysis/comparison scripts: migrated to Python in `repath-model/scripts`.
 - Benchmark progress/coverage/resolved-manifest scripts: migrated to Python in `repath-model/scripts`.
 - Benchmark audit + supported-holdout scripts: migrated to Python in `repath-model/scripts`.
+- Benchmark planning and labeling-queue scripts: migrated to Python in `repath-model/scripts`.
 - Node-based data suggestion/planning scripts: still in `repath-mobile/ml`.
 - Full data-science refactor for remaining data suggestion/planning scripts: next phase.

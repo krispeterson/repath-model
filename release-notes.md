@@ -9,6 +9,8 @@
 - 2026-02-17: Migrated benchmark dataset audit and supported holdout manifest workflows from `repath-mobile/ml/eval` JavaScript scripts to Python scripts in `repath-model/scripts`.
 - 2026-02-17: Updated `repath-mobile` script wiring and benchmark pipeline to call new Python audit/holdout scripts via `scripts/run-python.js`.
 - 2026-02-17: Added `notebooks/release_workflow.ipynb` and `notebooks/retraining_workflow.ipynb` as guided, command-oriented runbooks.
+- 2026-02-17: Migrated benchmark planning and labeling queue scripts (`plan priority`, `coverage expansion`, `batch builder`, and `completion template`) from `repath-mobile/ml/eval` JavaScript scripts to Python scripts in `repath-model/scripts`.
+- 2026-02-17: Updated `repath-mobile` script wiring so queue/planning commands now invoke `repath-model` Python scripts via `scripts/run-python.js`.
 
 ## Version
 - `vX.Y.Z`
