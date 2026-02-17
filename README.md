@@ -60,6 +60,13 @@ The following scripts were migrated from `repath-mobile/ml` into this repo:
 - `scripts/plan_benchmark_coverage_expansion.py`
 - `scripts/build_benchmark_batches.py`
 - `scripts/build_benchmark_completion_template.py`
+- `scripts/build_taxonomy.py`
+- `scripts/sync_labeled_from_manifest.py`
+- `scripts/dedupe_benchmark_labeled.py`
+- `scripts/normalize_benchmark_labeled_urls.py`
+- `scripts/merge_coverage_expansion_template.py`
+- `scripts/merge_retraining_queue.py`
+- `scripts/fill_retraining_negatives.py`
 
 Today these workflows still read/write datasets and artifacts that live in `repath-mobile` (`assets/models`, `ml/artifacts`, `test/benchmarks`).
 
@@ -161,6 +168,23 @@ python3 scripts/build_benchmark_batches.py \
 python3 scripts/build_benchmark_completion_template.py \
   --batches ../repath-mobile/test/benchmarks/benchmark-labeling-batches.json \
   --out ../repath-mobile/test/benchmarks/benchmark-completion-template.csv
+
+# local benchmark CSV curation helpers
+python3 scripts/sync_labeled_from_manifest.py \
+  --manifest ../repath-mobile/test/benchmarks/municipal-benchmark-manifest-v2.json \
+  --input ../repath-mobile/test/benchmarks/benchmark-labeled.csv \
+  --out ../repath-mobile/test/benchmarks/benchmark-labeled.csv
+python3 scripts/merge_coverage_expansion_template.py \
+  --input ../repath-mobile/test/benchmarks/benchmark-labeled.csv \
+  --template ../repath-mobile/test/benchmarks/benchmark-coverage-expansion-template.csv \
+  --out ../repath-mobile/test/benchmarks/benchmark-labeled.csv
+python3 scripts/dedupe_benchmark_labeled.py \
+  --input ../repath-mobile/test/benchmarks/benchmark-labeled.csv \
+  --out ../repath-mobile/test/benchmarks/benchmark-labeled.csv
+python3 scripts/normalize_benchmark_labeled_urls.py \
+  --input ../repath-mobile/test/benchmarks/benchmark-labeled.csv \
+  --cache-dir ../repath-mobile/test/benchmarks/images \
+  --out ../repath-mobile/test/benchmarks/benchmark-labeled.csv
 ```
 
 ## Notebooks
@@ -260,5 +284,6 @@ python3 /path/to/repath-model/scripts/verify_release.py \
 - Benchmark progress/coverage/resolved-manifest scripts: migrated to Python in `repath-model/scripts`.
 - Benchmark audit + supported-holdout scripts: migrated to Python in `repath-model/scripts`.
 - Benchmark planning and labeling-queue scripts: migrated to Python in `repath-model/scripts`.
-- Node-based data suggestion/planning scripts: still in `repath-mobile/ml`.
+- Local benchmark CSV curation scripts: migrated to Python in `repath-model/scripts`.
+- Node-based online/kaggle suggestion scripts: still in `repath-mobile/ml`.
 - Full data-science refactor for remaining data suggestion/planning scripts: next phase.
