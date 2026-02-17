@@ -34,6 +34,7 @@ def main() -> None:
     sync_script = Path(__file__).resolve().parent / "sync_benchmark_progress.py"
     build_resolved_script = Path(__file__).resolve().parent / "build_resolved_benchmark_manifest.py"
     coverage_script = Path(__file__).resolve().parent / "check_benchmark_coverage.py"
+    audit_script = Path(__file__).resolve().parent / "audit_benchmark_dataset.py"
 
     if not args.skip_kaggle:
         kaggle_cmd = [
@@ -86,8 +87,8 @@ def main() -> None:
     run_step(
         "Audit (Resolved)",
         [
-            "node",
-            str(Path("ml") / "eval" / "audit-benchmark-dataset.js"),
+            sys.executable,
+            str(audit_script),
             "--manifest",
             str(Path("test") / "benchmarks" / "municipal-benchmark-manifest.resolved.json"),
             "--out",

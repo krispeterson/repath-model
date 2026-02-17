@@ -54,6 +54,8 @@ The following scripts were migrated from `repath-mobile/ml` into this repo:
 - `scripts/sync_benchmark_progress.py`
 - `scripts/check_benchmark_coverage.py`
 - `scripts/build_resolved_benchmark_manifest.py`
+- `scripts/audit_benchmark_dataset.py`
+- `scripts/build_supported_holdout_manifest.py`
 
 Today these workflows still read/write datasets and artifacts that live in `repath-mobile` (`assets/models`, `ml/artifacts`, `test/benchmarks`).
 
@@ -113,13 +115,31 @@ python3 scripts/check_benchmark_coverage.py \
   --taxonomy ../repath-mobile/assets/models/municipal-taxonomy-v1.json \
   --manifest ../repath-mobile/test/benchmarks/municipal-benchmark-manifest-v2.json
 
+# build supported holdout manifest for model-supported labels
+python3 scripts/build_supported_holdout_manifest.py \
+  --labels ../repath-mobile/assets/models/yolo-repath.labels.json \
+  --input-csv ../repath-mobile/test/benchmarks/benchmark-labeled.csv \
+  --retraining-manifest ../repath-mobile/ml/artifacts/retraining/retraining-manifest.json \
+  --cache-dir ../repath-mobile/test/benchmarks/images/supported-holdout \
+  --out ../repath-mobile/test/benchmarks/benchmark-manifest.supported-holdout.json
+
 # materialize a resolved benchmark manifest with local/cache image paths
 python3 scripts/build_resolved_benchmark_manifest.py \
   --manifest ../repath-mobile/test/benchmarks/municipal-benchmark-manifest-v2.json \
   --completed ../repath-mobile/test/benchmarks/benchmark-labeled.csv \
   --cache-dir ../repath-mobile/test/benchmarks/images \
   --out ../repath-mobile/test/benchmarks/municipal-benchmark-manifest.resolved.json
+
+# audit benchmark quality and class-balance signals
+python3 scripts/audit_benchmark_dataset.py \
+  --manifest ../repath-mobile/test/benchmarks/municipal-benchmark-manifest.resolved.json \
+  --taxonomy ../repath-mobile/assets/models/municipal-taxonomy-v1.json \
+  --out ../repath-mobile/test/benchmarks/benchmark-dataset-audit.resolved.json
 ```
+
+## Notebooks
+- `notebooks/release_workflow.ipynb`: guided release bundle + GitHub release publishing flow.
+- `notebooks/retraining_workflow.ipynb`: guided benchmark prep, retraining, and candidate evaluation flow.
 
 ## Build A Versioned Release Bundle
 
@@ -212,5 +232,6 @@ python3 /path/to/repath-model/scripts/verify_release.py \
 - Benchmark orchestration entrypoints: migrated to Python in `repath-model/scripts`.
 - Benchmark analysis/comparison scripts: migrated to Python in `repath-model/scripts`.
 - Benchmark progress/coverage/resolved-manifest scripts: migrated to Python in `repath-model/scripts`.
+- Benchmark audit + supported-holdout scripts: migrated to Python in `repath-model/scripts`.
 - Node-based data suggestion/planning scripts: still in `repath-mobile/ml`.
-- Full data-science refactor (Python-native pipeline + notebooks): next phase.
+- Full data-science refactor for remaining data suggestion/planning scripts: next phase.
