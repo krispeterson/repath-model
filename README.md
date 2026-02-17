@@ -49,23 +49,39 @@ The following scripts were migrated from `repath-mobile/ml` into this repo:
 
 Today these workflows still read/write datasets and artifacts that live in `repath-mobile` (`assets/models`, `ml/artifacts`, `test/benchmarks`).
 
-Run from `repath-mobile` root:
+Run from `repath-model` root:
 ```bash
 # model fetch/export helper
-node scripts/run-python.js ../repath-model/scripts/fetch_yolov8n_tflite.py
+python3 scripts/fetch_yolov8n_tflite.py \
+  --out-dir ../repath-mobile/assets/models
 
 # benchmark current model
-node scripts/run-python.js ../repath-model/scripts/benchmark_model.py \
-  --manifest test/benchmarks/municipal-benchmark-manifest.resolved.json
+python3 scripts/benchmark_model.py \
+  --model ../repath-mobile/assets/models/yolo-repath.tflite \
+  --labels ../repath-mobile/assets/models/yolo-repath.labels.json \
+  --manifest ../repath-mobile/test/benchmarks/municipal-benchmark-manifest.resolved.json \
+  --cache-dir ../repath-mobile/test/benchmarks/images \
+  --out ../repath-mobile/test/benchmarks/latest-results.json
 
 # seed annotation boxes
-node scripts/run-python.js ../repath-model/scripts/seed_annotation_boxes.py
+python3 scripts/seed_annotation_boxes.py \
+  --bundle-root ../repath-mobile/ml/artifacts/retraining/annotation-bundle \
+  --model ../repath-mobile/assets/models/yolo-repath.tflite \
+  --labels ../repath-mobile/assets/models/yolo-repath.labels.json
 
 # train detector candidate
-node scripts/run-python.js ../repath-model/scripts/train_detector_from_annotation.py --nms
+python3 scripts/train_detector_from_annotation.py \
+  --bundle-root ../repath-mobile/ml/artifacts/retraining/annotation-bundle \
+  --candidate-root ../repath-mobile/ml/artifacts/models/candidates \
+  --project ../repath-mobile/ml/artifacts/training-runs \
+  --nms
 
 # export candidate from retraining manifest
-node scripts/run-python.js ../repath-model/scripts/export_candidate_from_retraining.py --nms
+python3 scripts/export_candidate_from_retraining.py \
+  --retraining-manifest ../repath-mobile/ml/artifacts/retraining/retraining-manifest.json \
+  --base-labels ../repath-mobile/assets/models/yolo-repath.labels.json \
+  --out-root ../repath-mobile/ml/artifacts/models/candidates \
+  --nms
 ```
 
 ## Build A Versioned Release Bundle
@@ -137,10 +153,19 @@ Validate release exists:
 gh release view "v${VERSION}" --repo krispeterson/repath-model
 ```
 
-Smoke test download from `repath-mobile`:
+Smoke test release download and integrity:
 ```bash
-cd ../repath-mobile
-npm run pull:model:release -- --version "$VERSION"
+mkdir -p /tmp/repath-model-release-smoke
+cd /tmp/repath-model-release-smoke
+
+gh release download "v${VERSION}" \
+  --repo krispeterson/repath-model \
+  --pattern "yolo-repath-v${VERSION}.tflite" \
+  --pattern "yolo-repath-v${VERSION}.labels.json" \
+  --pattern "release-manifest-v${VERSION}.json"
+
+python3 /path/to/repath-model/scripts/verify_release.py \
+  --manifest "release-manifest-v${VERSION}.json"
 ```
 
 ## Current Migration Status
