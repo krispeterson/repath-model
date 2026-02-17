@@ -56,6 +56,8 @@ The following scripts were migrated from `repath-mobile/ml` into this repo:
 - `scripts/training/build_retraining_manifest.py`
 - `scripts/training/build_retraining_image_inventory.py`
 - `scripts/training/build_retraining_source_issues.py`
+- `scripts/training/build_annotation_bundle.py`
+- `scripts/training/validate_annotation_bundle.py`
 - `scripts/evaluation/benchmark_candidate_model.py`
 - `scripts/evaluation/run_benchmark_pipeline.py`
 - `scripts/evaluation/analyze_benchmark_results.py`
@@ -136,6 +138,13 @@ python3 scripts/training/build_retraining_source_issues.py \
   --input ../repath-mobile/test/benchmarks/benchmark-labeled.csv \
   --seed ../repath-mobile/test/benchmarks/retraining-positive-source-issues.seed.json \
   --out ../repath-mobile/test/benchmarks/retraining-positive-source-issues.json
+python3 scripts/training/build_annotation_bundle.py \
+  --manifest ../repath-mobile/ml/artifacts/retraining/retraining-manifest.json \
+  --out-dir ../repath-mobile/ml/artifacts/retraining/annotation-bundle \
+  --no-download
+python3 scripts/training/validate_annotation_bundle.py \
+  --bundle-root ../repath-mobile/ml/artifacts/retraining/annotation-bundle \
+  --strict
 
 # analyze benchmark errors into JSON + priority CSV
 python3 scripts/evaluation/analyze_benchmark_results.py \
@@ -359,4 +368,5 @@ python3 /path/to/repath-model/scripts/release/verify_release.py \
 - Benchmark scaffold/seed/dedupe/export utility scripts: migrated to Python in `repath-model/scripts`.
 - Kaggle bootstrap and online suggestion scripts: migrated to Python in `repath-model/scripts`.
 - Retraining manifest/image-inventory/source-issues scripts: migrated to Python in `repath-model/scripts`.
-- Annotation bundle generation/validation, positive expansion helpers, and candidate promotion scripts: still in `repath-mobile/ml/training`.
+- Annotation bundle build/validation scripts: migrated to Python in `repath-model/scripts`.
+- Positive expansion helpers, missing-box filler, and candidate promotion scripts: still in `repath-mobile/ml/training`.
