@@ -1,5 +1,10 @@
 # RePath Model Release Notes
 
+## Unreleased Working Changes
+- 2026-02-17: Added `AGENTS.md` with a requirement for agents to keep this file updated when code changes.
+- 2026-02-17: Migrated benchmark error analysis and benchmark comparison workflows from `repath-mobile/ml/eval` JavaScript scripts to Python scripts in `repath-model/scripts`.
+- 2026-02-17: Updated `repath-mobile` script wiring to call the new Python analysis/comparison scripts via `scripts/run-python.js`.
+
 ## Version
 - `vX.Y.Z`
 

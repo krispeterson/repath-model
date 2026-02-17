@@ -65,6 +65,7 @@ def main() -> None:
     cwd = Path.cwd()
     script_dir = Path(__file__).resolve().parent
     benchmark_script = script_dir / "benchmark_model.py"
+    analyze_script = script_dir / "analyze_benchmark_results.py"
 
     candidate_dir = Path(args.candidate_dir).resolve() if args.candidate_dir else resolve_latest_candidate_dir(Path(args.candidates_root).resolve())
 
@@ -103,8 +104,8 @@ def main() -> None:
     run_step(
         "Analyze Candidate Results",
         [
-            "node",
-            str(Path("ml") / "eval" / "analyze-benchmark-results.js"),
+            sys.executable,
+            str(analyze_script),
             "--input",
             rel_or_abs(out_path, cwd),
             "--out",

@@ -49,6 +49,8 @@ The following scripts were migrated from `repath-mobile/ml` into this repo:
 - `scripts/export_candidate_from_retraining.py`
 - `scripts/benchmark_candidate_model.py`
 - `scripts/run_benchmark_pipeline.py`
+- `scripts/analyze_benchmark_results.py`
+- `scripts/compare_benchmark_results.py`
 
 Today these workflows still read/write datasets and artifacts that live in `repath-mobile` (`assets/models`, `ml/artifacts`, `test/benchmarks`).
 
@@ -85,6 +87,18 @@ python3 scripts/export_candidate_from_retraining.py \
   --base-labels ../repath-mobile/assets/models/yolo-repath.labels.json \
   --out-root ../repath-mobile/ml/artifacts/models/candidates \
   --nms
+
+# analyze benchmark errors into JSON + priority CSV
+python3 scripts/analyze_benchmark_results.py \
+  --input ../repath-mobile/test/benchmarks/latest-results.json \
+  --out ../repath-mobile/test/benchmarks/benchmark-error-analysis.json \
+  --template-out ../repath-mobile/test/benchmarks/benchmark-retraining-priority.csv
+
+# compare baseline and candidate benchmark runs
+python3 scripts/compare_benchmark_results.py \
+  --baseline ../repath-mobile/test/benchmarks/latest-results.json \
+  --candidate ../repath-mobile/test/benchmarks/latest-results.candidate.json \
+  --out ../repath-mobile/test/benchmarks/latest-results.compare.json
 ```
 
 ## Build A Versioned Release Bundle
@@ -176,5 +190,6 @@ python3 /path/to/repath-model/scripts/verify_release.py \
 - Release packaging + verification: in `repath-model`.
 - Core Python training/eval scripts: migrated to `repath-model/scripts`.
 - Benchmark orchestration entrypoints: migrated to Python in `repath-model/scripts`.
+- Benchmark analysis/comparison scripts: migrated to Python in `repath-model/scripts`.
 - Node-based data prep/eval transform scripts: still in `repath-mobile/ml`.
 - Full data-science refactor (Python-native pipeline + notebooks): next phase.
