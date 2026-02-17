@@ -17,6 +17,6 @@ This repository is Python-first and focused on model development, evaluation, an
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -e .[train,eval]
-python3 scripts/build_release.py --help
-python3 scripts/verify_release.py --help
+python3 scripts/release/build_release.py --help
+python3 scripts/release/verify_release.py --help
 ```

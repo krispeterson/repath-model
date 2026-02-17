@@ -10,7 +10,13 @@ Python-first repository for training, evaluating, and releasing RePath object-de
 ## Layout
 - `src/repath_model/`: Python package code.
 - `configs/`: training/eval/release config files.
-- `scripts/`: executable workflow scripts.
+- `scripts/`: executable workflow scripts, organized by domain:
+  - `scripts/annotation/`: annotation utilities and box seeding.
+  - `scripts/training/`: model fetch/train/export flows.
+  - `scripts/evaluation/`: benchmark, audit, and planning workflows.
+  - `scripts/data/`: taxonomy and benchmark CSV curation tools.
+  - `scripts/release/`: release build/verify/publish scripts.
+  - `scripts/utilities/`: standalone helper utilities.
 - `notebooks/`: exploratory notebooks.
 - `release-notes.md`: template notes file for GitHub releases.
 - `dist/releases/`: generated release bundles (local, ignored in git).
@@ -42,42 +48,42 @@ repath-model-yolo-box \
 ## Migrated Python Workflows
 
 The following scripts were migrated from `repath-mobile/ml` into this repo:
-- `scripts/fetch_yolov8n_tflite.py`
-- `scripts/benchmark_model.py`
-- `scripts/seed_annotation_boxes.py`
-- `scripts/train_detector_from_annotation.py`
-- `scripts/export_candidate_from_retraining.py`
-- `scripts/benchmark_candidate_model.py`
-- `scripts/run_benchmark_pipeline.py`
-- `scripts/analyze_benchmark_results.py`
-- `scripts/compare_benchmark_results.py`
-- `scripts/sync_benchmark_progress.py`
-- `scripts/check_benchmark_coverage.py`
-- `scripts/build_resolved_benchmark_manifest.py`
-- `scripts/audit_benchmark_dataset.py`
-- `scripts/build_supported_holdout_manifest.py`
-- `scripts/plan_benchmark_priority.py`
-- `scripts/plan_benchmark_coverage_expansion.py`
-- `scripts/build_benchmark_batches.py`
-- `scripts/build_benchmark_completion_template.py`
-- `scripts/build_taxonomy.py`
-- `scripts/sync_labeled_from_manifest.py`
-- `scripts/dedupe_benchmark_labeled.py`
-- `scripts/normalize_benchmark_labeled_urls.py`
-- `scripts/merge_coverage_expansion_template.py`
-- `scripts/merge_retraining_queue.py`
-- `scripts/fill_retraining_negatives.py`
+- `scripts/training/fetch_yolov8n_tflite.py`
+- `scripts/evaluation/benchmark_model.py`
+- `scripts/annotation/seed_annotation_boxes.py`
+- `scripts/training/train_detector_from_annotation.py`
+- `scripts/training/export_candidate_from_retraining.py`
+- `scripts/evaluation/benchmark_candidate_model.py`
+- `scripts/evaluation/run_benchmark_pipeline.py`
+- `scripts/evaluation/analyze_benchmark_results.py`
+- `scripts/evaluation/compare_benchmark_results.py`
+- `scripts/evaluation/sync_benchmark_progress.py`
+- `scripts/evaluation/check_benchmark_coverage.py`
+- `scripts/evaluation/build_resolved_benchmark_manifest.py`
+- `scripts/evaluation/audit_benchmark_dataset.py`
+- `scripts/evaluation/build_supported_holdout_manifest.py`
+- `scripts/evaluation/plan_benchmark_priority.py`
+- `scripts/evaluation/plan_benchmark_coverage_expansion.py`
+- `scripts/evaluation/build_benchmark_batches.py`
+- `scripts/evaluation/build_benchmark_completion_template.py`
+- `scripts/data/build_taxonomy.py`
+- `scripts/data/sync_labeled_from_manifest.py`
+- `scripts/data/dedupe_benchmark_labeled.py`
+- `scripts/data/normalize_benchmark_labeled_urls.py`
+- `scripts/data/merge_coverage_expansion_template.py`
+- `scripts/data/merge_retraining_queue.py`
+- `scripts/data/fill_retraining_negatives.py`
 
 Today these workflows still read/write datasets and artifacts that live in `repath-mobile` (`assets/models`, `ml/artifacts`, `test/benchmarks`).
 
 Run from `repath-model` root:
 ```bash
 # model fetch/export helper
-python3 scripts/fetch_yolov8n_tflite.py \
+python3 scripts/training/fetch_yolov8n_tflite.py \
   --out-dir ../repath-mobile/assets/models
 
 # benchmark current model
-python3 scripts/benchmark_model.py \
+python3 scripts/evaluation/benchmark_model.py \
   --model ../repath-mobile/assets/models/yolo-repath.tflite \
   --labels ../repath-mobile/assets/models/yolo-repath.labels.json \
   --manifest ../repath-mobile/test/benchmarks/municipal-benchmark-manifest.resolved.json \
@@ -85,49 +91,49 @@ python3 scripts/benchmark_model.py \
   --out ../repath-mobile/test/benchmarks/latest-results.json
 
 # seed annotation boxes
-python3 scripts/seed_annotation_boxes.py \
+python3 scripts/annotation/seed_annotation_boxes.py \
   --bundle-root ../repath-mobile/ml/artifacts/retraining/annotation-bundle \
   --model ../repath-mobile/assets/models/yolo-repath.tflite \
   --labels ../repath-mobile/assets/models/yolo-repath.labels.json
 
 # train detector candidate
-python3 scripts/train_detector_from_annotation.py \
+python3 scripts/training/train_detector_from_annotation.py \
   --bundle-root ../repath-mobile/ml/artifacts/retraining/annotation-bundle \
   --candidate-root ../repath-mobile/ml/artifacts/models/candidates \
   --project ../repath-mobile/ml/artifacts/training-runs \
   --nms
 
 # export candidate from retraining manifest
-python3 scripts/export_candidate_from_retraining.py \
+python3 scripts/training/export_candidate_from_retraining.py \
   --retraining-manifest ../repath-mobile/ml/artifacts/retraining/retraining-manifest.json \
   --base-labels ../repath-mobile/assets/models/yolo-repath.labels.json \
   --out-root ../repath-mobile/ml/artifacts/models/candidates \
   --nms
 
 # analyze benchmark errors into JSON + priority CSV
-python3 scripts/analyze_benchmark_results.py \
+python3 scripts/evaluation/analyze_benchmark_results.py \
   --input ../repath-mobile/test/benchmarks/latest-results.json \
   --out ../repath-mobile/test/benchmarks/benchmark-error-analysis.json \
   --template-out ../repath-mobile/test/benchmarks/benchmark-retraining-priority.csv
 
 # compare baseline and candidate benchmark runs
-python3 scripts/compare_benchmark_results.py \
+python3 scripts/evaluation/compare_benchmark_results.py \
   --baseline ../repath-mobile/test/benchmarks/latest-results.json \
   --candidate ../repath-mobile/test/benchmarks/latest-results.candidate.json \
   --out ../repath-mobile/test/benchmarks/latest-results.compare.json
 
 # sync labeled progress into benchmark manifest statuses
-python3 scripts/sync_benchmark_progress.py \
+python3 scripts/evaluation/sync_benchmark_progress.py \
   --manifest ../repath-mobile/test/benchmarks/municipal-benchmark-manifest-v2.json \
   --completed ../repath-mobile/test/benchmarks/benchmark-labeled.csv
 
 # evaluate taxonomy coverage across benchmark manifest labels
-python3 scripts/check_benchmark_coverage.py \
+python3 scripts/evaluation/check_benchmark_coverage.py \
   --taxonomy ../repath-mobile/assets/models/municipal-taxonomy-v1.json \
   --manifest ../repath-mobile/test/benchmarks/municipal-benchmark-manifest-v2.json
 
 # build supported holdout manifest for model-supported labels
-python3 scripts/build_supported_holdout_manifest.py \
+python3 scripts/evaluation/build_supported_holdout_manifest.py \
   --labels ../repath-mobile/assets/models/yolo-repath.labels.json \
   --input-csv ../repath-mobile/test/benchmarks/benchmark-labeled.csv \
   --retraining-manifest ../repath-mobile/ml/artifacts/retraining/retraining-manifest.json \
@@ -135,53 +141,53 @@ python3 scripts/build_supported_holdout_manifest.py \
   --out ../repath-mobile/test/benchmarks/benchmark-manifest.supported-holdout.json
 
 # materialize a resolved benchmark manifest with local/cache image paths
-python3 scripts/build_resolved_benchmark_manifest.py \
+python3 scripts/evaluation/build_resolved_benchmark_manifest.py \
   --manifest ../repath-mobile/test/benchmarks/municipal-benchmark-manifest-v2.json \
   --completed ../repath-mobile/test/benchmarks/benchmark-labeled.csv \
   --cache-dir ../repath-mobile/test/benchmarks/images \
   --out ../repath-mobile/test/benchmarks/municipal-benchmark-manifest.resolved.json
 
 # audit benchmark quality and class-balance signals
-python3 scripts/audit_benchmark_dataset.py \
+python3 scripts/evaluation/audit_benchmark_dataset.py \
   --manifest ../repath-mobile/test/benchmarks/municipal-benchmark-manifest.resolved.json \
   --taxonomy ../repath-mobile/assets/models/municipal-taxonomy-v1.json \
   --out ../repath-mobile/test/benchmarks/benchmark-dataset-audit.resolved.json
 
 # plan high-value benchmark labeling queue
-python3 scripts/plan_benchmark_priority.py \
+python3 scripts/evaluation/plan_benchmark_priority.py \
   --taxonomy ../repath-mobile/assets/models/municipal-taxonomy-v1.json \
   --manifest ../repath-mobile/test/benchmarks/municipal-benchmark-manifest-v2.json \
   --out ../repath-mobile/test/benchmarks/benchmark-priority-report.json
 
 # plan coverage expansion rows and template
-python3 scripts/plan_benchmark_coverage_expansion.py \
+python3 scripts/evaluation/plan_benchmark_coverage_expansion.py \
   --taxonomy ../repath-mobile/assets/models/municipal-taxonomy-v1.json \
   --manifest ../repath-mobile/test/benchmarks/municipal-benchmark-manifest-v2.json \
   --out ../repath-mobile/test/benchmarks/benchmark-coverage-expansion-report.json \
   --template-out ../repath-mobile/test/benchmarks/benchmark-coverage-expansion-template.csv
 
 # build labeling batches + completion template
-python3 scripts/build_benchmark_batches.py \
+python3 scripts/evaluation/build_benchmark_batches.py \
   --priority ../repath-mobile/test/benchmarks/benchmark-priority-report.json \
   --manifest ../repath-mobile/test/benchmarks/municipal-benchmark-manifest-v2.json \
   --out-dir ../repath-mobile/test/benchmarks
-python3 scripts/build_benchmark_completion_template.py \
+python3 scripts/evaluation/build_benchmark_completion_template.py \
   --batches ../repath-mobile/test/benchmarks/benchmark-labeling-batches.json \
   --out ../repath-mobile/test/benchmarks/benchmark-completion-template.csv
 
 # local benchmark CSV curation helpers
-python3 scripts/sync_labeled_from_manifest.py \
+python3 scripts/data/sync_labeled_from_manifest.py \
   --manifest ../repath-mobile/test/benchmarks/municipal-benchmark-manifest-v2.json \
   --input ../repath-mobile/test/benchmarks/benchmark-labeled.csv \
   --out ../repath-mobile/test/benchmarks/benchmark-labeled.csv
-python3 scripts/merge_coverage_expansion_template.py \
+python3 scripts/data/merge_coverage_expansion_template.py \
   --input ../repath-mobile/test/benchmarks/benchmark-labeled.csv \
   --template ../repath-mobile/test/benchmarks/benchmark-coverage-expansion-template.csv \
   --out ../repath-mobile/test/benchmarks/benchmark-labeled.csv
-python3 scripts/dedupe_benchmark_labeled.py \
+python3 scripts/data/dedupe_benchmark_labeled.py \
   --input ../repath-mobile/test/benchmarks/benchmark-labeled.csv \
   --out ../repath-mobile/test/benchmarks/benchmark-labeled.csv
-python3 scripts/normalize_benchmark_labeled_urls.py \
+python3 scripts/data/normalize_benchmark_labeled_urls.py \
   --input ../repath-mobile/test/benchmarks/benchmark-labeled.csv \
   --cache-dir ../repath-mobile/test/benchmarks/images \
   --out ../repath-mobile/test/benchmarks/benchmark-labeled.csv
@@ -196,7 +202,7 @@ python3 scripts/normalize_benchmark_labeled_urls.py \
 Create semver-tagged artifacts and a manifest with SHA256 checksums.
 
 ```bash
-python3 scripts/build_release.py \
+python3 scripts/release/build_release.py \
   --version 1.0.0 \
   --model /path/to/yolo-repath.tflite \
   --labels /path/to/yolo-repath.labels.json \
@@ -211,7 +217,7 @@ Outputs:
 
 Verify bundle integrity:
 ```bash
-python3 scripts/verify_release.py \
+python3 scripts/release/verify_release.py \
   --manifest dist/releases/v1.0.0/release-manifest-v1.0.0.json
 ```
 
@@ -227,14 +233,14 @@ Build + verify local bundle:
 ```bash
 VERSION=1.0.0
 
-python3 scripts/build_release.py \
+python3 scripts/release/build_release.py \
   --version "$VERSION" \
   --model /path/to/yolo-repath.tflite \
   --labels /path/to/yolo-repath.labels.json \
   --source-run-id 20260217-001 \
   --notes-file release-notes.md
 
-python3 scripts/verify_release.py \
+python3 scripts/release/verify_release.py \
   --manifest "dist/releases/v${VERSION}/release-manifest-v${VERSION}.json"
 ```
 
@@ -272,7 +278,7 @@ gh release download "v${VERSION}" \
   --pattern "yolo-repath-v${VERSION}.labels.json" \
   --pattern "release-manifest-v${VERSION}.json"
 
-python3 /path/to/repath-model/scripts/verify_release.py \
+python3 /path/to/repath-model/scripts/release/verify_release.py \
   --manifest "release-manifest-v${VERSION}.json"
 ```
 

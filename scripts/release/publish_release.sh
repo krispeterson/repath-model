@@ -2,8 +2,8 @@
 set -euo pipefail
 
 if [[ $# -lt 1 ]]; then
-  echo "Usage: scripts/publish_release.sh <version>"
-  echo "Example: scripts/publish_release.sh 1.0.0"
+  echo "Usage: scripts/release/publish_release.sh <version>"
+  echo "Example: scripts/release/publish_release.sh 1.0.0"
   exit 1
 fi
 

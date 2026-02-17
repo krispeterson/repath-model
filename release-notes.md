@@ -1,6 +1,9 @@
 # RePath Model Release Notes
 
 ## Unreleased Working Changes
+- 2026-02-17: Refactored Python workflow scripts into domain subdirectories under `scripts/` (`annotation`, `training`, `evaluation`, `data`, `release`, `utilities`) for findability.
+- 2026-02-17: Updated `repath-mobile` command wiring and JS forwarders to use new `repath-model/scripts/<domain>/...` script paths.
+- 2026-02-17: Fixed `notebooks/release_workflow.ipynb` and `notebooks/retraining_workflow.ipynb` cell sources to use real line breaks instead of visible `\\n` sequences.
 - 2026-02-17: Added `AGENTS.md` with a requirement for agents to keep this file updated when code changes.
 - 2026-02-17: Migrated benchmark error analysis and benchmark comparison workflows from `repath-mobile/ml/eval` JavaScript scripts to Python scripts in `repath-model/scripts`.
 - 2026-02-17: Updated `repath-mobile` script wiring to call the new Python analysis/comparison scripts via `scripts/run-python.js`.
@@ -44,7 +47,7 @@
 - Target app integration: `repath-mobile`
 
 ## Validation Checklist
-- [ ] Bundle built with `python3 scripts/build_release.py ...`
-- [ ] Bundle verified with `python3 scripts/verify_release.py ...`
+- [ ] Bundle built with `python3 scripts/release/build_release.py ...`
+- [ ] Bundle verified with `python3 scripts/release/verify_release.py ...`
 - [ ] GitHub release created with required artifacts
 - [ ] Release pull smoke test completed in `repath-mobile`

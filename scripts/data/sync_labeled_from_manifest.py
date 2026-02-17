@@ -12,7 +12,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Sync benchmark-labeled CSV rows from benchmark manifest entries.",
         usage=(
-            "python3 scripts/sync_labeled_from_manifest.py "
+            "python3 scripts/data/sync_labeled_from_manifest.py "
             "[--manifest test/benchmarks/municipal-benchmark-manifest-v2.json] "
             "[--input test/benchmarks/benchmark-labeled.csv] "
             "[--out test/benchmarks/benchmark-labeled.csv] [--include-ready] [--dry-run]"

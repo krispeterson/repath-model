@@ -12,7 +12,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Dedupe benchmark-labeled CSV by URL by clearing duplicate URLs.",
         usage=(
-            "python3 scripts/dedupe_benchmark_labeled.py "
+            "python3 scripts/data/dedupe_benchmark_labeled.py "
             "[--input test/benchmarks/benchmark-labeled.csv] "
             "[--out test/benchmarks/benchmark-labeled.csv] [--keep-first|--keep-last] [--dry-run]"
         ),

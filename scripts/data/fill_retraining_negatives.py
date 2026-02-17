@@ -16,7 +16,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Fill missing retraining negative URLs from existing baseline negative pool.",
         usage=(
-            "python3 scripts/fill_retraining_negatives.py "
+            "python3 scripts/data/fill_retraining_negatives.py "
             "[--input test/benchmarks/benchmark-labeled.csv] [--out test/benchmarks/benchmark-labeled.csv] [--dry-run]"
         ),
     )

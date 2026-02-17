@@ -12,7 +12,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Merge benchmark retraining queue CSV into benchmark-labeled CSV by row name.",
         usage=(
-            "python3 scripts/merge_retraining_queue.py "
+            "python3 scripts/data/merge_retraining_queue.py "
             "[--input test/benchmarks/benchmark-labeled.csv] "
             "[--queue test/benchmarks/benchmark-retraining-queue.csv] "
             "[--out test/benchmarks/benchmark-labeled.csv] [--dry-run]"

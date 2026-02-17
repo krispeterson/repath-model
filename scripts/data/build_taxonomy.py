@@ -9,7 +9,7 @@ from pathlib import Path
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Build municipal taxonomy JSON from pack JSON data.",
-        usage="python3 scripts/build_taxonomy.py [--pack assets/packs/<pack-id>.pack.json] [--out assets/models/municipal-taxonomy-v1.json]",
+        usage="python3 scripts/data/build_taxonomy.py [--pack assets/packs/<pack-id>.pack.json] [--out assets/models/municipal-taxonomy-v1.json]",
     )
     parser.add_argument("--pack", default=None, help="Pack JSON path.")
     parser.add_argument(

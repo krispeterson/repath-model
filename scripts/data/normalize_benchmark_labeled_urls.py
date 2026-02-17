@@ -12,7 +12,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Normalize benchmark-labeled URL values to repo-relative paths where possible.",
         usage=(
-            "python3 scripts/normalize_benchmark_labeled_urls.py "
+            "python3 scripts/data/normalize_benchmark_labeled_urls.py "
             "[--input test/benchmarks/benchmark-labeled.csv] "
             "[--cache-dir test/benchmarks/images] [--out test/benchmarks/benchmark-labeled.csv]"
         ),

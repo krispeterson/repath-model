@@ -12,7 +12,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Merge coverage expansion template rows into benchmark-labeled CSV.",
         usage=(
-            "python3 scripts/merge_coverage_expansion_template.py "
+            "python3 scripts/data/merge_coverage_expansion_template.py "
             "[--input test/benchmarks/benchmark-labeled.csv] "
             "[--template test/benchmarks/benchmark-coverage-expansion-template.csv] "
             "[--out test/benchmarks/benchmark-labeled.csv] [--dry-run]"
