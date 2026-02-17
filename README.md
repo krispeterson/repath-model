@@ -12,6 +12,7 @@ Python-first repository for training, evaluating, and releasing RePath object-de
 - `configs/`: training/eval/release config files.
 - `scripts/`: executable workflow scripts.
 - `notebooks/`: exploratory notebooks.
+- `release-notes.md`: template notes file for GitHub releases.
 - `dist/releases/`: generated release bundles (local, ignored in git).
 
 ## Setup
@@ -46,6 +47,8 @@ The following scripts were migrated from `repath-mobile/ml` into this repo:
 - `scripts/seed_annotation_boxes.py`
 - `scripts/train_detector_from_annotation.py`
 - `scripts/export_candidate_from_retraining.py`
+- `scripts/benchmark_candidate_model.py`
+- `scripts/run_benchmark_pipeline.py`
 
 Today these workflows still read/write datasets and artifacts that live in `repath-mobile` (`assets/models`, `ml/artifacts`, `test/benchmarks`).
 
@@ -114,6 +117,7 @@ Prerequisites:
 ```bash
 gh auth status
 ```
+Before building a release, update the checked-in `release-notes.md` template for the target version.
 
 Build + verify local bundle:
 ```bash
@@ -124,7 +128,7 @@ python3 scripts/build_release.py \
   --model /path/to/yolo-repath.tflite \
   --labels /path/to/yolo-repath.labels.json \
   --source-run-id 20260217-001 \
-  --notes-file /path/to/release-notes.md
+  --notes-file release-notes.md
 
 python3 scripts/verify_release.py \
   --manifest "dist/releases/v${VERSION}/release-manifest-v${VERSION}.json"
@@ -145,7 +149,7 @@ gh release create "v${VERSION}" \
   "dist/releases/v${VERSION}/SHA256SUMS" \
   --repo krispeterson/repath-model \
   --title "RePath Model v${VERSION}" \
-  --notes-file /path/to/release-notes.md
+  --notes-file release-notes.md
 ```
 
 Validate release exists:
@@ -171,5 +175,6 @@ python3 /path/to/repath-model/scripts/verify_release.py \
 ## Current Migration Status
 - Release packaging + verification: in `repath-model`.
 - Core Python training/eval scripts: migrated to `repath-model/scripts`.
-- Node-based data prep/eval orchestration: still in `repath-mobile/ml`.
+- Benchmark orchestration entrypoints: migrated to Python in `repath-model/scripts`.
+- Node-based data prep/eval transform scripts: still in `repath-mobile/ml`.
 - Full data-science refactor (Python-native pipeline + notebooks): next phase.
