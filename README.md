@@ -58,6 +58,10 @@ The following scripts were migrated from `repath-mobile/ml` into this repo:
 - `scripts/training/build_retraining_source_issues.py`
 - `scripts/training/build_annotation_bundle.py`
 - `scripts/training/validate_annotation_bundle.py`
+- `scripts/training/expand_retraining_positives_from_kaggle.py`
+- `scripts/training/materialize_retraining_positives.py`
+- `scripts/training/fill_missing_positive_boxes.py`
+- `scripts/training/promote_candidate_model.py`
 - `scripts/evaluation/benchmark_candidate_model.py`
 - `scripts/evaluation/run_benchmark_pipeline.py`
 - `scripts/evaluation/analyze_benchmark_results.py`
@@ -145,6 +149,24 @@ python3 scripts/training/build_annotation_bundle.py \
 python3 scripts/training/validate_annotation_bundle.py \
   --bundle-root ../repath-mobile/ml/artifacts/retraining/annotation-bundle \
   --strict
+python3 scripts/training/expand_retraining_positives_from_kaggle.py \
+  --input ../repath-mobile/test/benchmarks/benchmark-labeled.csv \
+  --priority-csv ../repath-mobile/test/benchmarks/latest-results.candidate.priority.csv \
+  --cache-dir ../repath-mobile/test/benchmarks/images/retraining-positives \
+  --out ../repath-mobile/test/benchmarks/benchmark-labeled.csv
+python3 scripts/training/materialize_retraining_positives.py \
+  --input ../repath-mobile/test/benchmarks/benchmark-labeled.csv \
+  --cache-dir ../repath-mobile/test/benchmarks/images/retraining-positives \
+  --out ../repath-mobile/test/benchmarks/benchmark-labeled.csv
+python3 scripts/training/fill_missing_positive_boxes.py \
+  --bundle-root ../repath-mobile/ml/artifacts/retraining/annotation-bundle \
+  --x-center 0.5 --y-center 0.5 --width 1 --height 1
+python3 scripts/training/promote_candidate_model.py \
+  --candidates-root ../repath-mobile/ml/artifacts/models/candidates \
+  --assets-dir ../repath-mobile/assets/models \
+  --prefix yolo-repath \
+  --write-metadata \
+  --metadata-path ../repath-mobile/ml/artifacts/models/active-model.json
 
 # analyze benchmark errors into JSON + priority CSV
 python3 scripts/evaluation/analyze_benchmark_results.py \

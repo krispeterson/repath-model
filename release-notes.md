@@ -1,6 +1,8 @@
 # RePath Model Release Notes
 
 ## Unreleased Working Changes
+- 2026-02-17: Migrated retraining positive lifecycle scripts to Python modules in `repath-model/src/repath_model/training` (`expand_retraining_positives_from_kaggle`, `materialize_retraining_positives`, `fill_missing_positive_boxes`, `promote_candidate_model`) with thin wrappers in `repath-model/scripts/training`.
+- 2026-02-17: Updated `repath-mobile/ml/training` wrappers so those four commands now delegate to `repath-model` Python scripts via `scripts/run-python.js`.
 - 2026-02-17: Migrated annotation bundle build and validation workflows to Python modules in `repath-model/src/repath_model/training` with thin wrappers in `repath-model/scripts/training`.
 - 2026-02-17: Updated `repath-mobile/ml/training` wrappers so `build-annotation-bundle` and `validate-annotation-bundle` now delegate to `repath-model` Python scripts via `scripts/run-python.js`.
 - 2026-02-17: Migrated retraining helper scripts (`build retraining manifest`, `build retraining image inventory`, `build retraining source issues`) to Python modules in `repath-model/src/repath_model/training` with thin wrappers in `repath-model/scripts/training`.
