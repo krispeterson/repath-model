@@ -12,6 +12,11 @@ authors = [{ name = "RePath" }]
 dependencies = []
 
 [project.optional-dependencies]
+eval = [
+  "numpy>=1.26",
+  "Pillow>=10.0",
+  "tensorflow>=2.16"
+]
 train = [
   "numpy>=1.26",
   "Pillow>=10.0",
