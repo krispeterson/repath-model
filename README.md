@@ -79,6 +79,11 @@ The following scripts were migrated from `repath-mobile/ml` into this repo:
 - `scripts/data/merge_coverage_expansion_template.py`
 - `scripts/data/merge_retraining_queue.py`
 - `scripts/data/fill_retraining_negatives.py`
+- `scripts/data/bootstrap_kaggle_dataset.py`
+- `scripts/data/suggest_benchmark_from_kaggle.py`
+- `scripts/data/suggest_benchmark_online.py`
+- `scripts/data/suggest_benchmark_online_bulk.py`
+- `scripts/data/suggest_negative_online.py`
 
 Today these workflows still read/write datasets and artifacts that live in `repath-mobile` (`assets/models`, `ml/artifacts`, `test/benchmarks`).
 
@@ -216,6 +221,25 @@ python3 scripts/data/normalize_benchmark_labeled_urls.py \
   --input ../repath-mobile/test/benchmarks/benchmark-labeled.csv \
   --cache-dir ../repath-mobile/test/benchmarks/images \
   --out ../repath-mobile/test/benchmarks/benchmark-labeled.csv
+python3 scripts/data/bootstrap_kaggle_dataset.py \
+  --target ../repath-mobile/ml/artifacts/datasets/kaggle-household-waste/images/images \
+  --mode symlink
+python3 scripts/data/suggest_benchmark_from_kaggle.py \
+  --manifest ../repath-mobile/test/benchmarks/municipal-benchmark-manifest-v2.json \
+  --cache-dir ../repath-mobile/test/benchmarks/images \
+  --out ../repath-mobile/test/benchmarks/benchmark-labeled.kaggle.csv \
+  --merge-into ../repath-mobile/test/benchmarks/benchmark-labeled.csv
+python3 scripts/data/suggest_benchmark_online.py \
+  --input ../repath-mobile/test/benchmarks/benchmark-labeled.csv \
+  --out ../repath-mobile/test/benchmarks/benchmark-labeled.online.csv \
+  --merge-into ../repath-mobile/test/benchmarks/benchmark-labeled.csv
+python3 scripts/data/suggest_benchmark_online_bulk.py \
+  --passes 4 --limit 30 --start-offset 0
+python3 scripts/data/suggest_negative_online.py \
+  --manifest ../repath-mobile/test/benchmarks/municipal-benchmark-manifest-v2.json \
+  --input ../repath-mobile/test/benchmarks/benchmark-labeled.csv \
+  --out ../repath-mobile/test/benchmarks/benchmark-labeled.negatives.csv \
+  --merge-into ../repath-mobile/test/benchmarks/benchmark-labeled.csv
 ```
 
 ## Notebooks
@@ -317,5 +341,5 @@ python3 /path/to/repath-model/scripts/release/verify_release.py \
 - Benchmark planning and labeling-queue scripts: migrated to Python in `repath-model/scripts`.
 - Local benchmark CSV curation scripts: migrated to Python in `repath-model/scripts`.
 - Benchmark scaffold/seed/dedupe/export utility scripts: migrated to Python in `repath-model/scripts`.
-- Node-based online/kaggle suggestion scripts: still in `repath-mobile/ml/data`.
+- Kaggle bootstrap and online suggestion scripts: migrated to Python in `repath-model/scripts`.
 - Annotation bundle generation/validation and candidate promotion scripts: still in `repath-mobile/ml/training`.

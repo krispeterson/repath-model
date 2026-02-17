@@ -1,6 +1,8 @@
 # RePath Model Release Notes
 
 ## Unreleased Working Changes
+- 2026-02-17: Migrated remaining `ml/data` Kaggle/bootstrap and online suggestion scripts to Python in `repath-model/scripts/data` (`bootstrap dataset`, `suggest from kaggle`, `suggest online`, `bulk online suggest`, `suggest negative online`).
+- 2026-02-17: Updated `repath-mobile/ml/data` wrappers so those commands now delegate to `repath-model` Python scripts via `scripts/run-python.js`.
 - 2026-02-17: Updated `notebooks/release_workflow.ipynb` default `VERSION` value to `0.1.0`.
 - 2026-02-17: Migrated remaining local benchmark eval utility scripts from `repath-mobile/ml/eval` to Python in `repath-model/scripts/evaluation` (`build manifest`, `build retraining queue`, `dedupe manifest`, `export unresolved rows`, `seed depth variants`, `seed negative entries`).
 - 2026-02-17: Updated `repath-mobile/ml/eval` wrappers so those commands now delegate to `repath-model` Python scripts via `scripts/run-python.js`.
