@@ -53,6 +53,9 @@ The following scripts were migrated from `repath-mobile/ml` into this repo:
 - `scripts/annotation/seed_annotation_boxes.py`
 - `scripts/training/train_detector_from_annotation.py`
 - `scripts/training/export_candidate_from_retraining.py`
+- `scripts/training/build_retraining_manifest.py`
+- `scripts/training/build_retraining_image_inventory.py`
+- `scripts/training/build_retraining_source_issues.py`
 - `scripts/evaluation/benchmark_candidate_model.py`
 - `scripts/evaluation/run_benchmark_pipeline.py`
 - `scripts/evaluation/analyze_benchmark_results.py`
@@ -120,6 +123,19 @@ python3 scripts/training/export_candidate_from_retraining.py \
   --base-labels ../repath-mobile/assets/models/yolo-repath.labels.json \
   --out-root ../repath-mobile/ml/artifacts/models/candidates \
   --nms
+
+# build retraining helper artifacts from labeled CSV + issue seed
+python3 scripts/training/build_retraining_manifest.py \
+  --input ../repath-mobile/test/benchmarks/benchmark-labeled.csv \
+  --out ../repath-mobile/ml/artifacts/retraining/retraining-manifest.json
+python3 scripts/training/build_retraining_image_inventory.py \
+  --input ../repath-mobile/test/benchmarks/benchmark-labeled.csv \
+  --out ../repath-mobile/test/benchmarks/retraining-positive-image-inventory.json \
+  --local-prefix test/benchmarks/images/retraining-positives/
+python3 scripts/training/build_retraining_source_issues.py \
+  --input ../repath-mobile/test/benchmarks/benchmark-labeled.csv \
+  --seed ../repath-mobile/test/benchmarks/retraining-positive-source-issues.seed.json \
+  --out ../repath-mobile/test/benchmarks/retraining-positive-source-issues.json
 
 # analyze benchmark errors into JSON + priority CSV
 python3 scripts/evaluation/analyze_benchmark_results.py \
@@ -342,4 +358,5 @@ python3 /path/to/repath-model/scripts/release/verify_release.py \
 - Local benchmark CSV curation scripts: migrated to Python in `repath-model/scripts`.
 - Benchmark scaffold/seed/dedupe/export utility scripts: migrated to Python in `repath-model/scripts`.
 - Kaggle bootstrap and online suggestion scripts: migrated to Python in `repath-model/scripts`.
-- Annotation bundle generation/validation and candidate promotion scripts: still in `repath-mobile/ml/training`.
+- Retraining manifest/image-inventory/source-issues scripts: migrated to Python in `repath-model/scripts`.
+- Annotation bundle generation/validation, positive expansion helpers, and candidate promotion scripts: still in `repath-mobile/ml/training`.
