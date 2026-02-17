@@ -66,6 +66,12 @@ The following scripts were migrated from `repath-mobile/ml` into this repo:
 - `scripts/evaluation/plan_benchmark_coverage_expansion.py`
 - `scripts/evaluation/build_benchmark_batches.py`
 - `scripts/evaluation/build_benchmark_completion_template.py`
+- `scripts/evaluation/build_benchmark_manifest.py`
+- `scripts/evaluation/build_retraining_queue.py`
+- `scripts/evaluation/dedupe_benchmark_manifest.py`
+- `scripts/evaluation/export_unresolved_benchmark_rows.py`
+- `scripts/evaluation/seed_benchmark_depth_variants.py`
+- `scripts/evaluation/seed_negative_benchmark_entries.py`
 - `scripts/data/build_taxonomy.py`
 - `scripts/data/sync_labeled_from_manifest.py`
 - `scripts/data/dedupe_benchmark_labeled.py`
@@ -174,6 +180,25 @@ python3 scripts/evaluation/build_benchmark_batches.py \
 python3 scripts/evaluation/build_benchmark_completion_template.py \
   --batches ../repath-mobile/test/benchmarks/benchmark-labeling-batches.json \
   --out ../repath-mobile/test/benchmarks/benchmark-completion-template.csv
+python3 scripts/evaluation/build_benchmark_manifest.py \
+  --taxonomy ../repath-mobile/assets/models/municipal-taxonomy-v1.json \
+  --seed ../repath-mobile/test/benchmarks/benchmark-manifest.seed.json \
+  --out ../repath-mobile/test/benchmarks/municipal-benchmark-manifest-v2.json
+python3 scripts/evaluation/build_retraining_queue.py \
+  --priority-csv ../repath-mobile/test/benchmarks/benchmark-retraining-priority.csv \
+  --out ../repath-mobile/test/benchmarks/benchmark-retraining-queue.csv
+python3 scripts/evaluation/dedupe_benchmark_manifest.py \
+  --manifest ../repath-mobile/test/benchmarks/municipal-benchmark-manifest-v2.json \
+  --report ../repath-mobile/test/benchmarks/benchmark-dedupe-report.json
+python3 scripts/evaluation/export_unresolved_benchmark_rows.py \
+  --input ../repath-mobile/test/benchmarks/benchmark-labeled.csv \
+  --out ../repath-mobile/test/benchmarks/benchmark-unresolved.csv
+python3 scripts/evaluation/seed_benchmark_depth_variants.py \
+  --manifest ../repath-mobile/test/benchmarks/municipal-benchmark-manifest-v2.json \
+  --target-ready 3 --max-new 200
+python3 scripts/evaluation/seed_negative_benchmark_entries.py \
+  --manifest ../repath-mobile/test/benchmarks/municipal-benchmark-manifest-v2.json \
+  --count 20
 
 # local benchmark CSV curation helpers
 python3 scripts/data/sync_labeled_from_manifest.py \
@@ -291,5 +316,6 @@ python3 /path/to/repath-model/scripts/release/verify_release.py \
 - Benchmark audit + supported-holdout scripts: migrated to Python in `repath-model/scripts`.
 - Benchmark planning and labeling-queue scripts: migrated to Python in `repath-model/scripts`.
 - Local benchmark CSV curation scripts: migrated to Python in `repath-model/scripts`.
-- Node-based online/kaggle suggestion scripts: still in `repath-mobile/ml`.
-- Full data-science refactor for remaining data suggestion/planning scripts: next phase.
+- Benchmark scaffold/seed/dedupe/export utility scripts: migrated to Python in `repath-model/scripts`.
+- Node-based online/kaggle suggestion scripts: still in `repath-mobile/ml/data`.
+- Annotation bundle generation/validation and candidate promotion scripts: still in `repath-mobile/ml/training`.

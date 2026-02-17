@@ -1,6 +1,9 @@
 # RePath Model Release Notes
 
 ## Unreleased Working Changes
+- 2026-02-17: Updated `notebooks/release_workflow.ipynb` default `VERSION` value to `0.1.0`.
+- 2026-02-17: Migrated remaining local benchmark eval utility scripts from `repath-mobile/ml/eval` to Python in `repath-model/scripts/evaluation` (`build manifest`, `build retraining queue`, `dedupe manifest`, `export unresolved rows`, `seed depth variants`, `seed negative entries`).
+- 2026-02-17: Updated `repath-mobile/ml/eval` wrappers so those commands now delegate to `repath-model` Python scripts via `scripts/run-python.js`.
 - 2026-02-17: Updated notebooks to resolve data roots via env overrides and prefer local `repath-model` paths before falling back to `repath-mobile` paths.
 - 2026-02-17: Updated `notebooks/release_workflow.ipynb` to auto-generate `SOURCE_RUN_ID` as `YYYYMMDD-HHMMSS` (with optional `SOURCE_RUN_ID` env override).
 - 2026-02-17: Refactored Python workflow scripts into domain subdirectories under `scripts/` (`annotation`, `training`, `evaluation`, `data`, `release`, `utilities`) for findability.
