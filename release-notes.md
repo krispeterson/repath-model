@@ -1,6 +1,8 @@
 # RePath Model Release Notes
 
 ## Unreleased Working Changes
+- 2026-02-17: Updated notebooks to resolve data roots via env overrides and prefer local `repath-model` paths before falling back to `repath-mobile` paths.
+- 2026-02-17: Updated `notebooks/release_workflow.ipynb` to auto-generate `SOURCE_RUN_ID` as `YYYYMMDD-HHMMSS` (with optional `SOURCE_RUN_ID` env override).
 - 2026-02-17: Refactored Python workflow scripts into domain subdirectories under `scripts/` (`annotation`, `training`, `evaluation`, `data`, `release`, `utilities`) for findability.
 - 2026-02-17: Updated `repath-mobile` command wiring and JS forwarders to use new `repath-model/scripts/<domain>/...` script paths.
 - 2026-02-17: Fixed `notebooks/release_workflow.ipynb` and `notebooks/retraining_workflow.ipynb` cell sources to use real line breaks instead of visible `\\n` sequences.
