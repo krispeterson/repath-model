@@ -31,6 +31,9 @@ def main() -> None:
     online_limit = args.online_limit if args.online_limit and args.online_limit > 0 else 40
     allow_network_failure = not args.strict_network
     benchmark_script = Path(__file__).resolve().parent / "benchmark_model.py"
+    sync_script = Path(__file__).resolve().parent / "sync_benchmark_progress.py"
+    build_resolved_script = Path(__file__).resolve().parent / "build_resolved_benchmark_manifest.py"
+    coverage_script = Path(__file__).resolve().parent / "check_benchmark_coverage.py"
 
     if not args.skip_kaggle:
         kaggle_cmd = [
@@ -61,19 +64,19 @@ def main() -> None:
     run_step(
         "Sync Progress",
         [
-            "node",
-            str(Path("ml") / "eval" / "sync-benchmark-progress.js"),
+            sys.executable,
+            str(sync_script),
             "--completed",
             str(Path("test") / "benchmarks" / "benchmark-labeled.csv"),
         ],
     )
-    run_step("Build Resolved Manifest", ["node", str(Path("ml") / "eval" / "build-resolved-benchmark-manifest.js")])
-    run_step("Coverage (Canonical)", ["node", str(Path("ml") / "eval" / "check-benchmark-coverage.js")])
+    run_step("Build Resolved Manifest", [sys.executable, str(build_resolved_script)])
+    run_step("Coverage (Canonical)", [sys.executable, str(coverage_script)])
     run_step(
         "Coverage (Resolved)",
         [
-            "node",
-            str(Path("ml") / "eval" / "check-benchmark-coverage.js"),
+            sys.executable,
+            str(coverage_script),
             "--manifest",
             str(Path("test") / "benchmarks" / "municipal-benchmark-manifest.resolved.json"),
             "--out",

@@ -51,6 +51,9 @@ The following scripts were migrated from `repath-mobile/ml` into this repo:
 - `scripts/run_benchmark_pipeline.py`
 - `scripts/analyze_benchmark_results.py`
 - `scripts/compare_benchmark_results.py`
+- `scripts/sync_benchmark_progress.py`
+- `scripts/check_benchmark_coverage.py`
+- `scripts/build_resolved_benchmark_manifest.py`
 
 Today these workflows still read/write datasets and artifacts that live in `repath-mobile` (`assets/models`, `ml/artifacts`, `test/benchmarks`).
 
@@ -99,6 +102,23 @@ python3 scripts/compare_benchmark_results.py \
   --baseline ../repath-mobile/test/benchmarks/latest-results.json \
   --candidate ../repath-mobile/test/benchmarks/latest-results.candidate.json \
   --out ../repath-mobile/test/benchmarks/latest-results.compare.json
+
+# sync labeled progress into benchmark manifest statuses
+python3 scripts/sync_benchmark_progress.py \
+  --manifest ../repath-mobile/test/benchmarks/municipal-benchmark-manifest-v2.json \
+  --completed ../repath-mobile/test/benchmarks/benchmark-labeled.csv
+
+# evaluate taxonomy coverage across benchmark manifest labels
+python3 scripts/check_benchmark_coverage.py \
+  --taxonomy ../repath-mobile/assets/models/municipal-taxonomy-v1.json \
+  --manifest ../repath-mobile/test/benchmarks/municipal-benchmark-manifest-v2.json
+
+# materialize a resolved benchmark manifest with local/cache image paths
+python3 scripts/build_resolved_benchmark_manifest.py \
+  --manifest ../repath-mobile/test/benchmarks/municipal-benchmark-manifest-v2.json \
+  --completed ../repath-mobile/test/benchmarks/benchmark-labeled.csv \
+  --cache-dir ../repath-mobile/test/benchmarks/images \
+  --out ../repath-mobile/test/benchmarks/municipal-benchmark-manifest.resolved.json
 ```
 
 ## Build A Versioned Release Bundle
@@ -191,5 +211,6 @@ python3 /path/to/repath-model/scripts/verify_release.py \
 - Core Python training/eval scripts: migrated to `repath-model/scripts`.
 - Benchmark orchestration entrypoints: migrated to Python in `repath-model/scripts`.
 - Benchmark analysis/comparison scripts: migrated to Python in `repath-model/scripts`.
-- Node-based data prep/eval transform scripts: still in `repath-mobile/ml`.
+- Benchmark progress/coverage/resolved-manifest scripts: migrated to Python in `repath-model/scripts`.
+- Node-based data suggestion/planning scripts: still in `repath-mobile/ml`.
 - Full data-science refactor (Python-native pipeline + notebooks): next phase.
