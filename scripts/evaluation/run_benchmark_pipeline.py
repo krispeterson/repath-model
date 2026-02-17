@@ -30,16 +30,21 @@ def main() -> None:
     args = parse_args()
     online_limit = args.online_limit if args.online_limit and args.online_limit > 0 else 40
     allow_network_failure = not args.strict_network
-    benchmark_script = Path(__file__).resolve().parent / "benchmark_model.py"
-    sync_script = Path(__file__).resolve().parent / "sync_benchmark_progress.py"
-    build_resolved_script = Path(__file__).resolve().parent / "build_resolved_benchmark_manifest.py"
-    coverage_script = Path(__file__).resolve().parent / "check_benchmark_coverage.py"
-    audit_script = Path(__file__).resolve().parent / "audit_benchmark_dataset.py"
+    eval_dir = Path(__file__).resolve().parent
+    data_dir = eval_dir.parent / "data"
+    benchmark_script = eval_dir / "benchmark_model.py"
+    sync_script = eval_dir / "sync_benchmark_progress.py"
+    build_resolved_script = eval_dir / "build_resolved_benchmark_manifest.py"
+    coverage_script = eval_dir / "check_benchmark_coverage.py"
+    audit_script = eval_dir / "audit_benchmark_dataset.py"
+    suggest_kaggle_script = data_dir / "suggest_benchmark_from_kaggle.py"
+    suggest_online_script = data_dir / "suggest_benchmark_online.py"
+    normalize_urls_script = data_dir / "normalize_benchmark_labeled_urls.py"
 
     if not args.skip_kaggle:
         kaggle_cmd = [
-            "node",
-            str(Path("ml") / "data" / "suggest-benchmark-from-kaggle.js"),
+            sys.executable,
+            str(suggest_kaggle_script),
             "--merge-into",
             str(Path("test") / "benchmarks" / "benchmark-labeled.csv"),
         ]
@@ -51,8 +56,8 @@ def main() -> None:
         run_step(
             "Suggest Online",
             [
-                "node",
-                str(Path("ml") / "data" / "suggest-benchmark-online.js"),
+                sys.executable,
+                str(suggest_online_script),
                 "--merge-into",
                 str(Path("test") / "benchmarks" / "benchmark-labeled.csv"),
                 "--limit",
@@ -61,7 +66,7 @@ def main() -> None:
             allow_failure=allow_network_failure,
         )
 
-    run_step("Normalize URLs", ["node", str(Path("ml") / "data" / "normalize-benchmark-labeled-urls.js")])
+    run_step("Normalize URLs", [sys.executable, str(normalize_urls_script)])
     run_step(
         "Sync Progress",
         [

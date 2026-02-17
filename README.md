@@ -18,6 +18,7 @@ Python-first repository for training, evaluating, and releasing RePath object-de
   - `scripts/release/`: release build/verify/publish scripts.
   - `scripts/utilities/`: standalone helper utilities.
 - `notebooks/`: exploratory notebooks.
+- `docs/`: workflow playbooks and migration notes.
 - `release-notes.md`: template notes file for GitHub releases.
 - `dist/releases/`: generated release bundles (local, ignored in git).
 
@@ -293,6 +294,9 @@ python3 scripts/data/suggest_negative_online.py \
 - `notebooks/release_workflow.ipynb`: guided release bundle + GitHub release publishing flow.
 - `notebooks/retraining_workflow.ipynb`: guided benchmark prep, retraining, and candidate evaluation flow.
 
+## Workflow Playbook
+- `docs/training-and-benchmark-playbook.md`: consolidated training/benchmark guide migrated from `repath-mobile/ml/README.md`.
+
 ## Build A Versioned Release Bundle
 
 Create semver-tagged artifacts and a manifest with SHA256 checksums.
@@ -391,4 +395,4 @@ python3 /path/to/repath-model/scripts/release/verify_release.py \
 - Kaggle bootstrap and online suggestion scripts: migrated to Python in `repath-model/scripts`.
 - Retraining manifest/image-inventory/source-issues scripts: migrated to Python in `repath-model/scripts`.
 - Annotation bundle build/validation scripts: migrated to Python in `repath-model/scripts`.
-- Positive expansion helpers, missing-box filler, and candidate promotion scripts: still in `repath-mobile/ml/training`.
+- Positive expansion helpers, missing-box filler, and candidate promotion scripts: migrated to Python in `repath-model/scripts`.

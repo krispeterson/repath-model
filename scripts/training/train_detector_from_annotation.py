@@ -5,9 +5,14 @@ import math
 import os
 import shutil
 import subprocess
+import sys
 from datetime import datetime
+from pathlib import Path
 
-from PIL import Image
+try:
+    from PIL import Image
+except Exception:
+    Image = None
 
 try:
     from ultralytics import YOLO
@@ -115,7 +120,8 @@ def load_classes(bundle_dir):
 
 
 def run_validation(bundle_dir):
-    cmd = ["node", "ml/training/validate-annotation-bundle.js", "--bundle-dir", bundle_dir, "--strict"]
+    validator_script = Path(__file__).resolve().parent / "validate_annotation_bundle.py"
+    cmd = [sys.executable, str(validator_script), "--bundle-dir", bundle_dir, "--strict"]
     result = subprocess.run(cmd, check=False)
     return result.returncode
 
@@ -140,6 +146,8 @@ def downscale_bundle_images(bundle_dir, max_pixels, max_dim):
         return summary
     if not os.path.isdir(images_dir):
         return summary
+    if Image is None:
+        raise SystemExit("Pillow is required for image preprocessing. Install with: pip install Pillow")
 
     valid_ext = {".jpg", ".jpeg", ".png", ".webp"}
     for name in sorted(os.listdir(images_dir)):

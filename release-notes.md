@@ -1,6 +1,9 @@
 # RePath Model Release Notes
 
 ## Unreleased Working Changes
+- 2026-02-17: Added `docs/training-and-benchmark-playbook.md` as the migrated benchmark/retraining workflow guide previously documented under `repath-mobile/ml/README.md`.
+- 2026-02-17: Updated `scripts/training/train_detector_from_annotation.py` to run strict annotation validation via local Python script entrypoints instead of `repath-mobile` Node wrappers.
+- 2026-02-17: Updated `scripts/evaluation/run_benchmark_pipeline.py` to call local Python data scripts instead of legacy `node ml/data/*.js` commands.
 - 2026-02-17: Migrated retraining positive lifecycle scripts to Python modules in `repath-model/src/repath_model/training` (`expand_retraining_positives_from_kaggle`, `materialize_retraining_positives`, `fill_missing_positive_boxes`, `promote_candidate_model`) with thin wrappers in `repath-model/scripts/training`.
 - 2026-02-17: Updated `repath-mobile/ml/training` wrappers so those four commands now delegate to `repath-model` Python scripts via `scripts/run-python.js`.
 - 2026-02-17: Migrated annotation bundle build and validation workflows to Python modules in `repath-model/src/repath_model/training` with thin wrappers in `repath-model/scripts/training`.
