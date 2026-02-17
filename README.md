@@ -296,6 +296,7 @@ python3 scripts/data/suggest_negative_online.py \
 
 ## Workflow Playbook
 - `docs/training-and-benchmark-playbook.md`: consolidated training/benchmark guide migrated from `repath-mobile/ml/README.md`.
+- `docs/release-artifact-contract.md`: consumer-facing release artifact and checksum verification contract.
 
 ## Build A Versioned Release Bundle
 

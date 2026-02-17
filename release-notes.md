@@ -1,6 +1,7 @@
 # RePath Model Release Notes
 
 ## Unreleased Working Changes
+- 2026-02-17: Added `docs/release-artifact-contract.md` defining required release assets, manifest schema, checksum verification requirements, and compatibility guarantees for consumers.
 - 2026-02-17: Added `docs/training-and-benchmark-playbook.md` as the migrated benchmark/retraining workflow guide previously documented under `repath-mobile/ml/README.md`.
 - 2026-02-17: Updated `scripts/training/train_detector_from_annotation.py` to run strict annotation validation via local Python script entrypoints instead of `repath-mobile` Node wrappers.
 - 2026-02-17: Updated `scripts/evaluation/run_benchmark_pipeline.py` to call local Python data scripts instead of legacy `node ml/data/*.js` commands.
