@@ -1,0 +1,6 @@
+{
+  "version": "1.0.0",
+  "model": "artifacts/candidates/20260216-164443/yolo-repath.tflite",
+  "labels": "artifacts/candidates/20260216-164443/yolo-repath.labels.json",
+  "source_run_id": "20260216-164443"
+}

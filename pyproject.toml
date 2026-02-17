@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=69.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "repath-model"
+version = "0.1.0"
+description = "Model training and release tooling for RePath object detection"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [{ name = "RePath" }]
+dependencies = []
+
+[project.optional-dependencies]
+train = [
+  "numpy>=1.26",
+  "Pillow>=10.0",
+  "ultralytics[export]>=8.4.0"
+]
+
+[project.scripts]
+repath-model-build-release = "repath_model.release.bundle:main"
+repath-model-verify-release = "repath_model.release.verify:main"
+repath-model-resolve-artifacts = "repath_model.artifacts.resolve:main"
+repath-model-yolo-box = "repath_model.annotation.yolo_box:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]

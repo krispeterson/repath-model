@@ -1,0 +1,25 @@
+name: Python CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install package
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .
+      - name: Smoke commands
+        run: |
+          repath-model-build-release --help
+          repath-model-verify-release --help
+          repath-model-resolve-artifacts --help
+          repath-model-yolo-box --help
